@@ -1,38 +1,30 @@
 if (Meteor.isClient) {
-    // counter starts at 0
-    Session.setDefault('counter', 0);
+
+    Template.hello.onCreated(function() {
+        this.results_ = new ReactiveVar([]);
+    });
 
     Template.hello.helpers({
-        counter: function () {
-            return Session.get('counter');
-        },
-        setResult: function(items) {
-
+        results: function() {
+            var me = Template.instance();
+            return me.results_.get();
         }
     });
 
     var doSearch = _.throttle(function(text, template) {
-        Meteor.call('omnisearch', text, function(err, tesult) {
-            template.setResult(result);
+        console.log('omnisearch', text);
+        Meteor.call('omnisearch', text, function(err, items) {
+            console.log(err, items);
+            template.results_.set(items);
         })
-    }, false, 200);
+    }, true, 200);
 
     Template.hello.events({
         "keyup #search-box": function(event, template) {
-            var text = $(e.target).val().trim();
+            var text = $(event.target).val().trim();
             if (text) {
                 doSearch(text, template);
             }
         }
     });
-}
-
-if (Meteor.isServer) {
-    Meteor.startup(function () {
-        // code to run on server at startup
-    });
-
-    Meteor.methods({
-
-    })
 }
