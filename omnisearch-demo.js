@@ -12,12 +12,13 @@ if (Meteor.isClient) {
     });
 
     var doSearch = _.throttle(function(text, template) {
-        console.log('omnisearch', text);
-        Meteor.call('omnisearch', text, function(err, items) {
+
+        var option = {};
+        Meteor.call('omnisearch', text, option, function(err, items) {
             console.log(err, items);
             template.results_.set(items);
         })
-    }, true, 200);
+    }, 200, {leading: false});
 
     Template.hello.events({
         "keyup #search-box": function(event, template) {
