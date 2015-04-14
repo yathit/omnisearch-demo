@@ -1,0 +1,27 @@
+<head>
+  <title>omnisearch-demo</title>
+</head>
+
+<body>
+  <h1>Welcome to Meteor!</h1>
+
+  {{> hello}}
+</body>
+
+
+
+<template name="hello">
+  <input type="text" id="search-box">
+    {{#each results}}
+      <div class="package">
+        <h4 class="name">
+            {{{snippet.title}}}
+        </h4>
+        <div class="description">
+          <img src="{{snippet.thumbnails.medium.url}}" alt="">
+            {{{snippet.description}}}
+        </div>
+      </div>
+    {{/each}}
+</template>
+
