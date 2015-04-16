@@ -8,6 +8,7 @@ if (Meteor.isClient) {
         results: function() {
             var me = Template.instance();
             var items = me.searchProvider.getResult();
+            console.log(items);
             return items;
         },
         progress: function() {
