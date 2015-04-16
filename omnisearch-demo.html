@@ -12,6 +12,12 @@
 
 <template name="hello">
   <input type="text" id="search-box">
+    {{#with progress}}
+        {{#if active}}
+          <div>{{{percent}}} %</div>
+        {{/if}}
+    {{/with}}
+
     {{#each results}}
       <div class="package">
         <h4 class="name">
