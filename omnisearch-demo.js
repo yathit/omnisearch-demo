@@ -8,7 +8,6 @@ if (Meteor.isClient) {
         results: function() {
             var me = Template.instance();
             var items = me.searchProvider.getResult();
-            console.log(items);
             return items;
         },
         progress: function() {
@@ -21,6 +20,10 @@ if (Meteor.isClient) {
     var doSearch = _.debounce(function(text, template) {
         var option = {};
         Meteor.call('omnisearch', text, option, function(err, items) {
+            if (text.length <= template.searchProvider.getQuery().length) {
+                // heuristically cancel, if query text is outdated due to immediate invoker
+                return;
+            }
             template.searchProvider.search(text);
         })
     }, 1000);
@@ -31,6 +34,7 @@ if (Meteor.isClient) {
             var is_token = event.keyCode == 10 || event.keyCode == 32;
             if (text) {
                 if (is_token) {
+                    // doSearch.cancel();
                     template.searchProvider.search(text);
                 } else {
                     doSearch(text, template);
