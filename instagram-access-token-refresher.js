@@ -41,7 +41,7 @@ if (Meteor.isServer) {
     fetchAcessToken: function(code) {
       var result = HTTP.post('https://api.instagram.com/oauth/access_token', {params: {
         'client_id': token,
-        'client_secret': 'ca1f70a5027c461285340095bee9849b',
+        'client_secret': 'ca1f70a5027c461285340095bee9849b', // valid key here, key in git is been revoked.
         'grant_type': 'authorization_code',
         'redirect_uri': redirectUri,
         'code': code
