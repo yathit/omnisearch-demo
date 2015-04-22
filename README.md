@@ -8,3 +8,7 @@ Register omnisearch package as local by giving absolute folder location.
 
 It is consumed by `meteor add kyawtun:omnisearch`. But in this pre-configure app, you will just run `meteor`.
 
+For testing, add symbolic link to api keys file in the package:
+
+    ln -s packages/omnisearch/server/key-store.js ./key-store.js
+
