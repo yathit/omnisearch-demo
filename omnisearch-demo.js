@@ -44,3 +44,21 @@ if (Meteor.isClient) {
         }
     });
 }
+
+if (Meteor.isServer) {
+
+    var omniSearch = new OmniSearch(API);
+
+    /**
+     * Provide client search.
+     * <pre>
+     *     Meteor.call('omnisearch', 'cat', {}, function(err, ans) {console.log(err, ans);});
+     * </pre>
+     */
+    Meteor.methods({
+        omnisearch: function(query, option) {
+            this.unblock();
+            return omniSearch.search(query, option);
+        }
+    });
+}
