@@ -68,40 +68,21 @@ if (Meteor.isServer) {
 
         var me = this;
         var addItems = function(items) {
-            console.log(items.length + ' result added');
+            if (prev_query != query) {return;}
+            console.log(items.length + ' ' + query + ' result added');
             items.map(function(item) {
                 item.query = query;
                 me.added('photos',  Random.id(), item);
-            })
+            });
             me.ready();
         };
 
-        console.log(query + new Date());
-        addItems(omniSearch.searchGoogleImage(query));
-        if (prev_query != query) {return;}
-
-        console.log(query + new Date());
-        addItems(omniSearch.searchBingImage(query));
-        if (prev_query != query) {return;}
-
-        console.log(query + new Date());
-        addItems(omniSearch.searchGettyImages(query));
-        if (prev_query != query) {return;}
-
-        console.log(query + new Date());
-        addItems(omniSearch.searchGiphy(query));
-        if (prev_query != query) {return;}
-
-        console.log(query + new Date());
-        addItems(omniSearch.searchInstagram(query));
-        if (prev_query != query) {return;}
-
-        console.log(query + new Date());
-        addItems(omniSearch.searchFlickr(query));
-        console.log(query + new Date());
-
-        this.ready();
-        console.log('searching ' + query + ' done.');
+        omniSearch.searchGoogleImage(query, addItems);
+        omniSearch.searchBingImage(query, addItems);
+        omniSearch.searchGettyImages(query, addItems);
+        omniSearch.searchGiphy(query, addItems);
+        omniSearch.searchInstagramByTag(query, addItems);
+        omniSearch.searchFlickr(query, addItems);
 
     });
 
