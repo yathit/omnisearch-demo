@@ -9,9 +9,10 @@ if (Meteor.isClient) {
 
     Template.body.helpers({
         photos: function () {
-            return Photos.find({
+            var result = Photos.find({
                 query: Session.get('query')
-            });
+            }, {sort: {order: 1}});
+            return result;
         },
         searching: function () {
             return false;
@@ -69,9 +70,10 @@ if (Meteor.isServer) {
         var me = this;
         var addItems = function(items) {
             if (prev_query != query) {return;}
-            console.log(items.length + ' ' + query + ' result added');
+            console.log(items.length + ' ' + query + ' result added from ' + (items[0] ? items[0].source : ''));
             items.map(function(item) {
                 item.query = query;
+                item.order = item.rank + item.source;
                 me.added('photos',  Random.id(), item);
             });
             me.ready();
