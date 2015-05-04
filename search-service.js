@@ -18,10 +18,7 @@ if (Meteor.isClient) {
             event.preventDefault();
             var query = template.$('input[type=text]').val();
             if (query){
-
-
                 omniSearch.search(query);
-
             }
         }
     });
