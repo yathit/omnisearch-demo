@@ -4,9 +4,6 @@
   <input type="submit" value="Search">
 </form>
 
-{{#if searching}}
-  <p>Searching...</p>
-{{else}}
   {{#if photos.count}}
     <hr>
     <table>
@@ -15,7 +12,7 @@
       {{/each}}
     </table>
   {{/if}}
-{{/if}}
+
 </body>
 
 <template name="book">

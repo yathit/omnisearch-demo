@@ -13,9 +13,6 @@ if (Meteor.isClient) {
                 query: Session.get('query')
             }, {sort: {order: 1}});
             return result;
-        },
-        searching: function () {
-            return false;
         }
     });
 
@@ -39,7 +36,6 @@ if (Meteor.isClient) {
     Tracker.autorun(function () {
         if (Session.get('query')) {
             var searchHandle = Meteor.subscribe('search', Session.get('query'));
-            Session.set('searching', !searchHandle.ready());
         }
     });
 }
