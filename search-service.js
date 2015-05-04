@@ -3,16 +3,37 @@
  */
 
 if (Meteor.isClient) {
-    var SearchResult = new Mongo.Collection('SearchResult');
 
-    Session.setDefault('searching', false);
+    var OmniSearchSource = function() {
+        this.searchResult = new Mongo.Collection('SearchResult');
+
+
+        this.queryVar = new ReactiveVar('');
+    };
+
+
+    OmniSearchSource.prototype.getResult = function() {
+        return this.searchResult.find({
+            query: this.queryVar.get()
+        }, {sort: {order: 1}});
+    };
+
+
+    OmniSearchSource.prototype.search = function(query) {
+        var docs = this.searchResult.find({}).fetch();
+
+        for (var i = 0; i < docs.length; i++) {
+            this.searchResult.remove(docs[i]._id);
+        }
+        this.queryVar.set(query);
+        Meteor.subscribe('search', query);
+    };
+
+    var omniSearch = new OmniSearchSource();
 
     Template.body.helpers({
-        photos: function () {
-            var result = SearchResult.find({
-                query: Session.get('query')
-            }, {sort: {order: 1}});
-            return result;
+        photos: function() {
+            return omniSearch.getResult();
         }
     });
 
@@ -21,23 +42,14 @@ if (Meteor.isClient) {
             event.preventDefault();
             var query = template.$('input[type=text]').val();
             if (query){
-                var docs = SearchResult.find({}).fetch();
 
-                for (var i = 0; i < docs.length; i++) {
-                    SearchResult.remove(docs[i]._id);
-                }
 
-                Session.set('query', query);
+                omniSearch.search(query);
 
             }
         }
     });
 
-    Tracker.autorun(function () {
-        if (Session.get('query')) {
-            var searchHandle = Meteor.subscribe('search', Session.get('query'));
-        }
-    });
 }
 
 if (Meteor.isServer) {
