@@ -3,13 +3,13 @@
  */
 
 if (Meteor.isClient) {
-    Photos = new Mongo.Collection('photos');
+    var SearchResult = new Mongo.Collection('SearchResult');
 
     Session.setDefault('searching', false);
 
     Template.body.helpers({
         photos: function () {
-            var result = Photos.find({
+            var result = SearchResult.find({
                 query: Session.get('query')
             }, {sort: {order: 1}});
             return result;
@@ -24,10 +24,10 @@ if (Meteor.isClient) {
             event.preventDefault();
             var query = template.$('input[type=text]').val();
             if (query){
-                var docs = Photos.find({}).fetch();
+                var docs = SearchResult.find({}).fetch();
 
                 for (var i = 0; i < docs.length; i++) {
-                    Photos.remove(docs[i]._id);
+                    SearchResult.remove(docs[i]._id);
                 }
 
                 Session.set('query', query);
@@ -74,7 +74,7 @@ if (Meteor.isServer) {
             items.map(function(item) {
                 item.query = query;
                 item.order = item.rank + item.source;
-                me.added('photos',  Random.id(), item);
+                me.added('SearchResult',  Random.id(), item);
             });
             me.ready();
         };
@@ -84,7 +84,7 @@ if (Meteor.isServer) {
         omniSearch.searchGettyImages(query, addItems);
         omniSearch.searchGiphy(query, addItems);
         omniSearch.searchInstagramByTag(query, addItems);
-        omniSearch.searchFlickr(query, addItems);
+        // omniSearch.searchFlickr(query, addItems);
 
     });
 
